@@ -1,0 +1,133 @@
+<script>
+
+
+let SELECTED_TASK = null;
+
+
+
+window.viewTask = function(taskID){
+
+
+const task = APP_STATE.tasks.find(
+
+task =>
+
+task[TASK_IDX.ID] === taskID
+
+);
+
+
+
+if(!task){
+
+alert("Task not found.");
+
+return;
+
+}
+
+
+
+SELECTED_TASK = task;
+
+
+showTaskDetails(task);
+
+
+}
+
+
+
+
+
+function showTaskDetails(task){
+
+
+alert(
+
+"Task Details\n\n"
+
++
+
+"Title: "
+
++
+
+task[TASK_IDX.TITLE]
+
++
+
+"\nDepartment: "
+
++
+
+task[TASK_IDX.DEPARTMENT]
+
++
+
+"\nPriority: "
+
++
+
+task[TASK_IDX.PRIORITY]
+
++
+
+"\nStatus: "
+
++
+
+task[TASK_IDX.STATUS]
+
+);
+
+
+}
+
+
+
+
+
+function completeSelectedTask(){
+
+
+if(!SELECTED_TASK){
+
+return;
+
+}
+
+
+apiCompleteTask(
+
+SELECTED_TASK[TASK_IDX.ID],
+
+"",
+
+function(){
+
+alert(
+"Task completed."
+);
+
+
+if(typeof refreshTasks === "function"){
+
+refreshTasks();
+
+}
+
+
+},
+
+
+handleError
+
+
+);
+
+
+}
+
+
+</script>

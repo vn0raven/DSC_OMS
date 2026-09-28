@@ -1,0 +1,478 @@
+<script>
+
+/******************************************************
+ * CLIENT HELPER SERVICE
+ *
+ * Handles:
+ * - Common frontend utilities
+ * - Loading screen
+ * - Formatting
+ * - Error handling
+ * - DOM helpers
+ ******************************************************/
+
+
+
+
+
+/******************************************************
+ * TASK COLUMN INDEX
+ *
+ * Frontend copy of backend TASK_IDX
+ ******************************************************/
+
+
+const TASK_IDX = {
+
+
+ID:0,
+
+TITLE:1,
+
+DEPARTMENT:2,
+
+PROJECT:3,
+
+CREATED_BY:4,
+
+PRIORITY:5,
+
+START_DATE:6,
+
+DEADLINE:7,
+
+STATUS:8,
+
+PROGRESS:9,
+
+NOTES:10,
+
+EVIDENCE:11,
+
+CREATED_DATE:12,
+
+UPDATED_DATE:13
+
+
+};
+
+
+
+
+
+
+
+/******************************************************
+ * HIDE LOADING SCREEN
+ ******************************************************/
+
+
+function hideLoading(){
+
+
+const loader =
+
+document.getElementById(
+"loadingScreen"
+);
+
+
+
+
+if(loader){
+
+
+loader.style.display =
+"none";
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * SHOW LOADING SCREEN
+ ******************************************************/
+
+
+function showLoading(){
+
+
+const loader =
+
+document.getElementById(
+"loadingScreen"
+);
+
+
+
+if(loader){
+
+
+loader.style.display =
+"flex";
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * ERROR HANDLER
+ ******************************************************/
+
+
+function handleError(
+error
+){
+
+
+console.error(
+error
+);
+
+
+
+alert(
+
+error.message ||
+
+"Something went wrong."
+
+);
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * SHOW ERROR
+ *
+ * Alias used by app startup
+ ******************************************************/
+
+
+function showError(
+message
+){
+
+
+console.error(
+message
+);
+
+
+alert(
+message
+);
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * SET TEXT CONTENT
+ ******************************************************/
+
+
+function setText(
+id,
+value
+){
+
+
+const element =
+
+document.getElementById(
+id
+);
+
+
+
+
+if(element){
+
+
+element.innerText =
+
+value ?? "";
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * DATE FORMATTER
+ ******************************************************/
+
+
+function formatDate(
+date
+){
+
+
+if(!date){
+
+return "";
+
+}
+
+
+
+const formatted =
+
+new Date(date);
+
+
+
+
+if(
+isNaN(formatted)
+){
+
+return date;
+
+}
+
+
+
+return formatted
+
+.toLocaleDateString();
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * STATUS CLASS
+ ******************************************************/
+
+
+function getStatusClass(
+status
+){
+
+
+switch(status){
+
+
+case "Completed":
+
+return "success";
+
+
+
+case "Ongoing":
+
+return "warning";
+
+
+
+case "Pending":
+
+return "pending";
+
+
+
+case "Rejected":
+
+return "danger";
+
+
+
+case "Archived":
+
+return "secondary";
+
+
+
+default:
+
+return "";
+
+}
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * STATUS CLASS ALIAS
+ *
+ * Compatibility with old code
+ ******************************************************/
+
+
+function statusClass(
+status
+){
+
+
+return getStatusClass(
+status
+);
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * ESCAPE HTML
+ *
+ * Prevent XSS in rendered tables
+ ******************************************************/
+
+
+function escapeHTML(
+value
+){
+
+
+if(
+value === null ||
+
+value === undefined
+){
+
+return "";
+
+}
+
+
+
+return String(value)
+
+.replace(
+/&/g,
+"&amp;"
+)
+
+.replace(
+/</g,
+"&lt;"
+)
+
+.replace(
+/>/g,
+"&gt;"
+)
+
+.replace(
+/"/g,
+"&quot;"
+)
+
+.replace(
+/'/g,
+"&#039;"
+);
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * EMPTY TABLE MESSAGE
+ ******************************************************/
+
+
+function renderEmpty(
+elementID,
+message
+){
+
+
+const element =
+
+document.getElementById(
+elementID
+);
+
+
+
+
+if(element){
+
+
+element.innerHTML =
+
+
+`
+
+<tr>
+
+<td colspan="6">
+
+${message}
+
+</td>
+
+</tr>
+
+`;
+
+
+
+}
+
+
+}
+
+</script>
+
+
+
+

@@ -1,0 +1,411 @@
+<script>
+
+/******************************************************
+ * CLIENT APPLICATION SERVICE
+ *
+ * Handles:
+ * - Application startup
+ * - Global state
+ * - User rendering
+ ******************************************************/
+
+
+let APP_DATA = null;
+
+
+let APP_STATE = {
+
+    user:null,
+
+    dashboard:null,
+
+    tasks:[],
+
+    notifications:[]
+
+};
+
+
+let APP_LOADED = false;
+
+
+
+
+/******************************************************
+ * APPLICATION START
+ ******************************************************/
+
+
+function loadApp(){
+
+
+    if(APP_LOADED){
+
+        console.log(
+            "APP ALREADY LOADED"
+        );
+
+        return;
+
+    }
+
+
+
+    console.log(
+        "STARTING APPLICATION..."
+    );
+
+
+
+    showLoading();
+
+
+
+
+    apiGetAppData(
+
+
+        function(data){
+
+
+
+            console.log(
+                "APP DATA RESPONSE:",
+                data
+            );
+
+
+
+            if(!data){
+
+
+                showError(
+                    "Empty server response."
+                );
+
+
+                hideLoading();
+
+                return;
+
+
+            }
+
+
+
+
+            if(!data.success){
+
+
+                showError(
+                    data.message || 
+                    "Application loading failed."
+                );
+
+
+                hideLoading();
+
+                return;
+
+
+            }
+
+
+
+
+            /********************************
+             * SAVE GLOBAL DATA
+             ********************************/
+
+
+            APP_DATA = data;
+
+
+
+            APP_STATE.user =
+                data.user;
+
+
+
+            APP_STATE.dashboard =
+                data.dashboard;
+
+
+
+            APP_STATE.tasks =
+                data.tasks || [];
+
+
+
+            APP_STATE.notifications =
+                data.notifications || [];
+
+
+
+
+
+            console.log(
+                "USER RENDER START"
+            );
+
+
+            if(typeof renderUser === "function"){
+
+
+                renderUser(
+                    data.user
+                );
+
+
+            }
+
+
+
+
+
+            console.log(
+                "DASHBOARD RENDER START"
+            );
+
+
+            if(typeof renderDashboard === "function"){
+
+
+                renderDashboard(
+                    data.dashboard
+                );
+
+
+            }
+
+
+
+
+
+            console.log(
+                "TASK RENDER START"
+            );
+
+
+            /*
+             * renderTasks does not currently exist.
+             * Prevent application crash.
+             */
+
+
+            if(typeof renderTasks === "function"){
+
+
+                renderTasks(
+                    data.tasks
+                );
+
+
+            }
+
+            else{
+
+
+                console.warn(
+                    "renderTasks() not found. Skipping."
+                );
+
+
+            }
+
+
+
+
+
+
+
+            console.log(
+                "NOTIFICATION RENDER START"
+            );
+
+
+            if(typeof renderNotifications === "function"){
+
+
+                renderNotifications(
+                    data.notifications
+                );
+
+
+            }
+
+            else{
+
+
+                console.warn(
+                    "renderNotifications() not found."
+                );
+
+
+            }
+
+
+
+
+
+
+            APP_LOADED = true;
+
+
+
+            hideLoading();
+
+
+
+
+            console.log(
+                "APPLICATION READY"
+            );
+
+
+
+        },
+
+
+
+        function(error){
+
+
+            console.error(
+                "APP LOAD ERROR:",
+                error
+            );
+
+
+            showError(
+                error.message || 
+                "Unable to load application."
+            );
+
+
+            hideLoading();
+
+
+        }
+
+
+
+    );
+
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * USER RENDERING
+ ******************************************************/
+
+
+function renderUser(user){
+
+
+
+    if(!user){
+
+        console.warn(
+            "No user data."
+        );
+
+        return;
+
+    }
+
+
+
+
+    setText(
+        "userName",
+        user.name
+    );
+
+
+
+
+    setText(
+
+        "userInfo",
+
+        `${user.position || ""}
+        | ${user.role || ""}
+        • ${user.department || ""}`
+
+    );
+
+
+
+
+
+    setText(
+        "userRole",
+        user.role
+    );
+
+
+
+
+
+    const button =
+
+    document.getElementById(
+        "createTaskBtn"
+    );
+
+
+
+
+
+    if(button){
+
+
+
+        button.style.display =
+
+
+        [
+
+            "Lead",
+
+            "Co-Lead",
+
+            "Executive"
+
+        ]
+
+        .includes(
+            user.role
+        )
+
+
+        ?
+
+
+        "block"
+
+
+        :
+
+
+        "none";
+
+
+
+    }
+
+
+
+}
+
+
+
+</script>

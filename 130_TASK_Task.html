@@ -1,0 +1,138 @@
+<script>
+
+
+/******************************************************
+ * TASK MODULE
+ ******************************************************/
+
+
+function renderTasks(tasks){
+
+
+const table =
+document.getElementById(
+"taskTable"
+);
+
+
+
+if(!table){
+console.warn(
+"taskTable not found"
+);
+return;
+}
+
+
+
+
+if(!tasks || tasks.length === 0){
+
+
+table.innerHTML = `
+
+<tr>
+
+<td colspan="6">
+
+No tasks available.
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+
+
+let html = "";
+
+
+
+tasks.forEach(function(task){
+
+
+html += `
+
+<tr>
+
+
+<td>
+${escapeHTML(task[1] || "")}
+</td>
+
+
+<td>
+${escapeHTML(task[2] || "")}
+</td>
+
+
+<td>
+${escapeHTML(task[5] || "")}
+</td>
+
+
+<td>
+${formatDate(task[7])}
+</td>
+
+
+<td>
+
+<span class="${getStatusClass(task[8])}">
+
+${task[8] || ""}
+
+</span>
+
+</td>
+
+
+<td>
+
+<button onclick="viewTask('${task[0]}')">
+
+View
+
+</button>
+
+</td>
+
+
+</tr>
+
+`;
+
+
+
+});
+
+
+
+
+table.innerHTML = html;
+
+
+}
+
+
+
+
+function loadTasks(){
+
+
+renderTasks(
+APP_STATE.tasks
+);
+
+
+}
+
+
+
+</script>

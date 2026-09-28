@@ -1,0 +1,52 @@
+<script>
+
+/******************************************************
+ * DASHBOARD MODULE
+ ******************************************************/
+
+
+function renderDashboard(dashboard){
+
+
+if(!dashboard){
+
+return;
+
+}
+
+
+
+let summary =
+dashboard.summary || dashboard;
+
+
+
+setText(
+"totalTasks",
+summary.total || 0
+);
+
+
+setText(
+"ongoingTasks",
+summary.ongoing || 0
+);
+
+
+setText(
+"completedTasks",
+summary.completed || 0
+);
+
+
+setText(
+"pendingTasks",
+summary.pending || 0
+);
+
+
+}
+
+
+
+</script>

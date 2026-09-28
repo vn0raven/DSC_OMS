@@ -1,0 +1,287 @@
+<script>
+
+/******************************************************
+ * NOTIFICATION MODULE
+ *
+ * Handles:
+ * - Notification loading
+ * - Notification rendering
+ * - Mark as read
+ ******************************************************/
+
+
+
+
+
+/******************************************************
+ * LOAD NOTIFICATIONS
+ ******************************************************/
+
+
+function loadNotifications(){
+
+
+apiGetNotifications(
+
+function(notifications){
+
+
+
+APP_STATE.notifications =
+notifications;
+
+
+
+
+renderNotifications();
+
+
+
+}
+
+
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * RENDER NOTIFICATIONS
+ ******************************************************/
+
+
+function renderNotifications(){
+
+
+
+const list =
+
+document.getElementById(
+"notificationList"
+);
+
+
+
+const page =
+
+document.getElementById(
+"notificationPage"
+);
+
+
+
+
+
+const notifications =
+
+APP_STATE.notifications;
+
+
+
+
+
+
+
+if(
+!notifications ||
+notifications.length === 0
+){
+
+
+const empty =
+
+`
+<p>
+No notifications.
+</p>
+`;
+
+
+
+if(list){
+
+list.innerHTML =
+empty;
+
+}
+
+
+
+if(page){
+
+page.innerHTML =
+empty;
+
+}
+
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+
+let html = "";
+
+
+
+
+
+
+notifications.forEach(notification=>{
+
+
+
+html +=
+
+
+`
+
+<div class="notification-item"
+
+onclick="markNotificationRead('${notification[0]}')">
+
+
+<div>
+
+<strong>
+${notification[4]}
+</strong>
+
+
+<p>
+${notification[3]}
+</p>
+
+
+<small>
+
+${formatDate(notification[6])}
+
+</small>
+
+
+</div>
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+
+
+
+
+if(list){
+
+list.innerHTML =
+html;
+
+
+}
+
+
+
+
+
+if(page){
+
+page.innerHTML =
+html;
+
+
+}
+
+
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * MARK NOTIFICATION READ
+ ******************************************************/
+
+
+function markNotificationRead(
+notificationID
+){
+
+
+
+apiMarkNotificationRead(
+
+notificationID,
+
+
+function(){
+
+
+
+loadNotifications();
+
+
+
+},
+
+
+
+handleError
+
+
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * REFRESH NOTIFICATIONS
+ ******************************************************/
+
+
+function refreshNotifications(){
+
+
+loadNotifications();
+
+
+}
+
+</script>
+
+
+

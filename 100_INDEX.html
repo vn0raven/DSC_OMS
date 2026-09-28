@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<?!= include("102_CSS"); ?>
+</head>
+
+<body>
+
+<div id="loadingScreen">
+Loading DSC USeP OMT System...
+</div>
+
+
+<div class="app-container">
+
+<aside class="sidebar">
+
+<div class="logo">
+DSC USeP
+<br>
+<span>OMT System</span>
+</div>
+
+
+<nav>
+
+<a class="nav-item active" onclick="showSection(this,'dashboard')">
+📊 Dashboard
+</a>
+
+<a class="nav-item" onclick="showSection(this,'tasks')">
+📋 Tasks
+</a>
+
+<a class="nav-item" onclick="showSection(this,'requests')">
+📝 Requests
+</a>
+
+<a class="nav-item" onclick="showSection(this,'notifications')">
+🔔 Notifications
+</a>
+
+</nav>
+
+</aside>
+
+
+<main class="main">
+
+
+<header class="topbar">
+
+<div>
+
+<h2>
+Welcome,
+<span id="userName">Loading...</span>
+</h2>
+
+<p id="userInfo">
+Loading user information...
+</p>
+
+</div>
+
+
+<div class="profile">
+🔔
+<span id="userRole"></span>
+</div>
+
+</header>
+
+
+
+<section id="dashboard" class="page-section">
+
+
+<div class="cards">
+
+
+<div class="card">
+<h4>Total Tasks</h4>
+<h1 id="totalTasks">0</h1>
+</div>
+
+
+<div class="card">
+<h4>Ongoing</h4>
+<h1 id="ongoingTasks">0</h1>
+</div>
+
+
+<div class="card">
+<h4>Completed</h4>
+<h1 id="completedTasks">0</h1>
+</div>
+
+
+<div class="card">
+<h4>Pending</h4>
+<h1 id="pendingTasks">0</h1>
+</div>
+
+
+</div>
+
+
+
+<div class="panel">
+
+
+<div class="panel-header">
+
+<h3>
+My Tasks
+</h3>
+
+
+<button
+type="button"
+id="createTaskBtn"
+style="display:none;"
+onclick="openCreateTask()">
+
++ Create Task
+
+</button>
+
+
+</div>
+
+
+<table>
+
+<thead>
+
+<tr>
+<th>Task</th>
+<th>Department</th>
+<th>Priority</th>
+<th>Deadline</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+
+<tbody id="taskTable">
+
+<tr>
+<td colspan="6">
+Loading tasks...
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+
+</div>
+
+
+
+<div class="panel">
+
+<h3>
+Notifications
+</h3>
+
+<div id="notificationList">
+Loading notifications...
+</div>
+
+</div>
+
+
+</section>
+<section id="tasks" class="page-section" style="display:none;">
+
+<div class="panel">
+
+<h3>
+Tasks Management
+</h3>
+
+
+<table>
+
+<tbody id="taskManagementTable">
+
+<tr>
+
+<td>
+Loading tasks...
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+
+</div>
+
+</section>
+
+
+
+
+
+<section id="requests" class="page-section" style="display:none;">
+
+<div class="panel">
+
+<h3>
+Requests
+</h3>
+
+
+<div id="requestList">
+Loading requests...
+</div>
+
+
+</div>
+
+</section>
+
+
+
+
+
+<section id="notifications" class="page-section" style="display:none;">
+
+<div class="panel">
+
+<h3>
+Notifications
+</h3>
+
+
+<div id="notificationPage">
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+
+</main>
+
+</div>
+
+
+
+
+
+<!-- TASK VIEW MODAL -->
+
+<div id="taskModal" class="task-modal">
+
+<div class="task-modal-content">
+
+<div id="taskModalBody">
+
+</div>
+
+</div>
+
+</div>
+<!-- CLIENT DEPENDENCIES -->
+
+<?!= include("110_CLIENT_API"); ?>
+
+<?!= include("113_CLIENT_HELPER"); ?>
+
+
+<!-- CORE APPLICATION -->
+
+<?!= include("111_CLIENT_APP"); ?>
+
+
+<!-- ROUTER -->
+
+<?!= include("112_CLIENT_ROUTER"); ?>
+
+
+<!-- MODULES -->
+
+<?!= include("120_DASHBOARD"); ?>
+
+<?!= include("130_TASK_Task"); ?>
+
+<?!= include("131_TASK_Form"); ?>
+
+<?!= include("132_TASK_View"); ?>
+
+<?!= include("140_REQUEST_Request"); ?>
+
+<?!= include("150_NOTIFICATION_Notification"); ?>
+
+
+<!-- TEST MODULE -->
+
+<?!= include("160_TEST_JS"); ?>
+
+
+
+
+<script>
+
+window.onerror = function(
+message,
+source,
+line,
+column,
+error
+){
+
+console.error(
+"GLOBAL ERROR:",
+message,
+"LINE:",
+line
+);
+
+};
+
+
+
+
+
+window.onload = function(){
+
+
+console.log(
+"========== DSC OMT START =========="
+);
+
+
+
+console.log(
+"INITIAL FUNCTION CHECK"
+);
+
+
+
+console.log(
+"showSection:",
+typeof window.showSection
+);
+
+
+
+console.log(
+"openCreateTask:",
+typeof window.openCreateTask
+);
+
+
+
+console.log(
+"testLiveFunction:",
+typeof window.testLiveFunction
+);
+
+
+
+
+
+if(typeof loadApp === "function"){
+
+loadApp();
+
+}
+else{
+
+console.error(
+"loadApp() missing"
+);
+
+}
+
+
+
+
+
+
+setTimeout(function(){
+
+
+console.log(
+"========== POST LOAD CHECK =========="
+);
+
+
+
+console.log(
+"showSection:",
+typeof window.showSection
+);
+
+
+
+console.log(
+"openCreateTask:",
+typeof window.openCreateTask
+);
+
+
+
+console.log(
+"testLiveFunction:",
+typeof window.testLiveFunction
+);
+
+
+
+},5000);
+
+
+
+};
+
+</script>
+
+
+</body>
+
+</html>

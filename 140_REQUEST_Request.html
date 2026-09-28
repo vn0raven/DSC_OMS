@@ -1,0 +1,291 @@
+<script>
+
+/******************************************************
+ * REQUEST MODULE
+ *
+ * Handles:
+ * - Request creation
+ * - Request approval
+ * - Request rejection
+ ******************************************************/
+
+
+
+
+
+/******************************************************
+ * LOAD REQUESTS
+ ******************************************************/
+
+
+function loadRequests(){
+
+
+/*
+ Future:
+ Backend endpoint for
+ retrieving requests
+ */
+
+
+const container =
+
+document.getElementById(
+"requests"
+);
+
+
+
+if(container){
+
+
+const panel =
+
+container.querySelector(
+".panel"
+);
+
+
+
+if(panel){
+
+
+panel.innerHTML =
+
+`
+
+<h3>
+Requests
+</h3>
+
+
+<p>
+Request management module ready.
+</p>
+
+
+`;
+
+}
+
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * CREATE REQUEST
+ ******************************************************/
+
+
+function createRequest(){
+
+
+const title =
+
+prompt(
+"Request title:"
+);
+
+
+
+if(
+!title
+){
+
+return;
+
+}
+
+
+
+
+
+const description =
+
+prompt(
+"Description:"
+);
+
+
+
+
+
+
+const request = {
+
+
+title:title,
+
+
+description:description || "",
+
+
+priority:"Medium"
+
+
+};
+
+
+
+
+
+
+apiCreateRequest(
+
+request,
+
+
+function(response){
+
+
+alert(
+
+"Request submitted."
+
+);
+
+
+
+loadRequests();
+
+
+},
+
+
+
+handleError
+
+
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * APPROVE REQUEST
+ ******************************************************/
+
+
+function approveRequest(
+requestID
+){
+
+
+
+apiApproveRequest(
+
+requestID,
+
+
+function(result){
+
+
+
+alert(
+"Request approved."
+);
+
+
+
+loadRequests();
+
+
+
+},
+
+
+
+handleError
+
+
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+/******************************************************
+ * REJECT REQUEST
+ ******************************************************/
+
+
+function rejectRequest(
+requestID
+){
+
+
+
+const remarks =
+
+prompt(
+"Reason for rejection:"
+);
+
+
+
+
+
+
+apiRejectRequest(
+
+requestID,
+
+remarks,
+
+
+function(result){
+
+
+
+alert(
+"Request rejected."
+);
+
+
+
+loadRequests();
+
+
+
+},
+
+
+
+handleError
+
+
+
+);
+
+
+
+}
+
+</script>
+
+
+

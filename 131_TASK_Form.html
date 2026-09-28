@@ -1,0 +1,232 @@
+<script>
+
+/******************************************************
+ * CREATE TASK FORM
+ ******************************************************/
+
+
+window.openCreateTask = function(){
+
+
+const title =
+prompt(
+"Enter task title:"
+);
+
+
+
+if(!title || title.trim()===""){
+
+alert(
+"Task title is required."
+);
+
+return;
+
+}
+
+
+
+
+const department =
+prompt(
+"Enter department:"
+) || "Technology";
+
+
+
+
+
+const priority =
+prompt(
+"Enter priority (Low / Medium / High):"
+) || "Medium";
+
+
+
+
+
+const deadline =
+prompt(
+"Enter deadline YYYY-MM-DD:"
+);
+
+
+
+
+
+if(!deadline){
+
+alert(
+"Deadline is required."
+);
+
+return;
+
+}
+
+
+
+
+
+const description =
+prompt(
+"Enter description:"
+) || "";
+
+
+
+
+
+
+
+const task = {
+
+
+title:title.trim(),
+
+
+department:department.trim(),
+
+
+priority:priority.trim(),
+
+
+deadline:deadline.trim(),
+
+
+description:description.trim(),
+
+
+status:"Pending"
+
+
+};
+
+
+
+
+
+console.log(
+"CREATING TASK:",
+task
+);
+
+
+
+
+
+
+
+apiCreateTask(
+
+
+task,
+
+
+function(response){
+
+
+
+console.log(
+"CREATE RESPONSE:",
+response
+);
+
+
+
+
+
+if(!response){
+
+
+alert(
+"No server response."
+);
+
+
+return;
+
+
+}
+
+
+
+
+
+if(response.success){
+
+
+
+alert(
+"Task created successfully."
+);
+
+
+
+
+
+// refresh current data
+
+APP_LOADED=false;
+
+
+loadApp();
+
+
+
+
+}
+
+else{
+
+
+
+alert(
+
+response.message ||
+
+"Task creation failed."
+
+);
+
+
+}
+
+
+
+},
+
+
+
+function(error){
+
+
+console.error(
+"CREATE TASK ERROR:",
+error
+);
+
+
+
+alert(
+error.message ||
+"Unable to create task."
+);
+
+
+
+}
+
+
+
+);
+
+
+
+}
+
+
+
+
+</script>
