@@ -1,16 +1,19 @@
 <script>
 
 /******************************************************
- * CLIENT APPLICATION SERVICE
+ * CLIENT APPLICATION SERVICE V3
  *
  * Handles:
  * - Application startup
  * - Global state
  * - User rendering
+ * - Live data refresh
  ******************************************************/
 
 
+
 let APP_DATA = null;
+
 
 
 let APP_STATE = {
@@ -26,7 +29,13 @@ let APP_STATE = {
 };
 
 
+
 let APP_LOADED = false;
+
+
+
+
+
 
 
 
@@ -39,262 +48,496 @@ let APP_LOADED = false;
 function loadApp(){
 
 
-    if(APP_LOADED){
+if(APP_LOADED){
 
-        console.log(
-            "APP ALREADY LOADED"
-        );
 
-        return;
+console.log(
+"APP ALREADY LOADED"
+);
 
-    }
 
+return;
 
 
-    console.log(
-        "STARTING APPLICATION..."
-    );
+}
 
 
 
-    showLoading();
 
+console.log(
+"STARTING APPLICATION..."
+);
 
 
 
-    apiGetAppData(
 
 
-        function(data){
+showLoading();
 
 
 
-            console.log(
-                "APP DATA RESPONSE:",
-                data
-            );
 
 
+apiGetAppData(
 
-            if(!data){
 
 
-                showError(
-                    "Empty server response."
-                );
+function(data){
 
 
-                hideLoading();
 
-                return;
+console.log(
+"APP DATA RESPONSE:",
+data
+);
 
 
-            }
 
 
 
+if(!data){
 
-            if(!data.success){
 
+showError(
+"Empty server response."
+);
 
-                showError(
-                    data.message || 
-                    "Application loading failed."
-                );
 
+hideLoading();
 
-                hideLoading();
 
-                return;
+return;
 
 
-            }
+}
 
 
 
 
-            /********************************
-             * SAVE GLOBAL DATA
-             ********************************/
 
 
-            APP_DATA = data;
+if(!data.success){
 
 
+showError(
 
-            APP_STATE.user =
-                data.user;
+data.message ||
 
+"Application loading failed."
 
+);
 
-            APP_STATE.dashboard =
-                data.dashboard;
 
+hideLoading();
 
 
-            APP_STATE.tasks =
-                data.tasks || [];
+return;
 
 
+}
 
-            APP_STATE.notifications =
-                data.notifications || [];
 
 
 
 
 
-            console.log(
-                "USER RENDER START"
-            );
 
+saveApplicationState(data);
 
-            if(typeof renderUser === "function"){
 
 
-                renderUser(
-                    data.user
-                );
 
 
-            }
 
+renderApplication();
 
 
 
 
-            console.log(
-                "DASHBOARD RENDER START"
-            );
 
 
-            if(typeof renderDashboard === "function"){
+APP_LOADED=true;
 
 
-                renderDashboard(
-                    data.dashboard
-                );
 
+hideLoading();
 
-            }
 
 
 
 
+console.log(
+"APPLICATION READY"
+);
 
-            console.log(
-                "TASK RENDER START"
-            );
 
 
-            /*
-             * renderTasks does not currently exist.
-             * Prevent application crash.
-             */
 
+},
 
-            if(typeof renderTasks === "function"){
 
 
-                renderTasks(
-                    data.tasks
-                );
 
 
-            }
+function(error){
 
-            else{
 
 
-                console.warn(
-                    "renderTasks() not found. Skipping."
-                );
+console.error(
 
+"APP LOAD ERROR:",
 
-            }
+error
 
+);
 
 
 
 
+showError(
 
+error.message ||
 
-            console.log(
-                "NOTIFICATION RENDER START"
-            );
+"Unable to load application."
 
+);
 
-            if(typeof renderNotifications === "function"){
 
 
-                renderNotifications(
-                    data.notifications
-                );
 
+hideLoading();
 
-            }
-
-            else{
-
-
-                console.warn(
-                    "renderNotifications() not found."
-                );
-
-
-            }
-
-
-
-
-
-
-            APP_LOADED = true;
-
-
-
-            hideLoading();
-
-
-
-
-            console.log(
-                "APPLICATION READY"
-            );
-
-
-
-        },
-
-
-
-        function(error){
-
-
-            console.error(
-                "APP LOAD ERROR:",
-                error
-            );
-
-
-            showError(
-                error.message || 
-                "Unable to load application."
-            );
-
-
-            hideLoading();
-
-
-        }
-
-
-
-    );
 
 
 
 }
+
+
+
+);
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/******************************************************
+ * SAVE GLOBAL STATE
+ ******************************************************/
+
+
+function saveApplicationState(data){
+
+
+
+APP_DATA=data;
+
+
+
+
+APP_STATE.user =
+
+data.user;
+
+
+
+APP_STATE.dashboard =
+
+data.dashboard;
+
+
+
+APP_STATE.tasks =
+
+data.tasks || [];
+
+
+
+APP_STATE.notifications =
+
+data.notifications || [];
+
+
+
+
+console.log(
+"STATE UPDATED",
+APP_STATE
+);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+/******************************************************
+ * RENDER EVERYTHING
+ ******************************************************/
+
+
+function renderApplication(){
+
+
+
+console.log(
+"RENDER APPLICATION"
+);
+
+
+
+
+
+if(typeof renderUser === "function"){
+
+
+renderUser(
+
+APP_STATE.user
+
+);
+
+
+}
+
+
+
+
+
+
+
+if(typeof renderDashboard === "function"){
+
+
+renderDashboard(
+
+APP_STATE.dashboard
+
+);
+
+
+}
+
+
+
+
+
+
+
+
+if(typeof renderTasks === "function"){
+
+
+renderTasks(
+
+APP_STATE.tasks
+
+);
+
+
+}
+
+
+
+
+
+
+
+
+if(typeof renderNotifications === "function"){
+
+
+renderNotifications(
+
+APP_STATE.notifications
+
+);
+
+
+}
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/******************************************************
+ * LIVE REFRESH
+ *
+ * Used after:
+ * - Update task
+ * - Complete task
+ * - Create task
+ ******************************************************/
+
+
+
+function refreshApp(){
+
+
+
+console.log(
+"REFRESHING APPLICATION..."
+);
+
+
+
+
+showLoading();
+
+
+
+
+
+apiGetAppData(
+
+
+
+
+
+function(data){
+
+
+
+console.log(
+"REFRESH RESPONSE:",
+data
+);
+
+
+
+
+
+
+if(!data || !data.success){
+
+
+showError(
+"Refresh failed."
+);
+
+
+hideLoading();
+
+
+return;
+
+
+}
+
+
+
+
+
+
+saveApplicationState(data);
+
+
+
+
+
+renderApplication();
+
+
+
+
+
+hideLoading();
+
+
+
+
+
+
+console.log(
+"APPLICATION REFRESHED"
+);
+
+
+
+
+},
+
+
+
+
+
+function(error){
+
+
+
+console.error(
+"REFRESH ERROR:",
+error
+);
+
+
+
+
+showError(
+
+error.message ||
+
+"Unable to refresh."
+
+);
+
+
+
+
+hideLoading();
+
+
+
+}
+
+
+
+
+
+);
+
+
+
+}
+
+
+
+
+
+
+
 
 
 
@@ -311,100 +554,134 @@ function renderUser(user){
 
 
 
-    if(!user){
-
-        console.warn(
-            "No user data."
-        );
-
-        return;
-
-    }
+if(!user){
 
 
+console.warn(
+"No user data."
+);
 
 
-    setText(
-        "userName",
-        user.name
-    );
+return;
 
 
-
-
-    setText(
-
-        "userInfo",
-
-        `${user.position || ""}
-        | ${user.role || ""}
-        • ${user.department || ""}`
-
-    );
+}
 
 
 
 
 
-    setText(
-        "userRole",
-        user.role
-    );
+
+
+setText(
+
+"userName",
+
+user.name
+
+);
 
 
 
 
 
-    const button =
-
-    document.getElementById(
-        "createTaskBtn"
-    );
 
 
 
+setText(
 
+"userInfo",
 
-    if(button){
+`${user.position || ""}
+| ${user.role || ""}
+• ${user.department || ""}`
 
-
-
-        button.style.display =
-
-
-        [
-
-            "Lead",
-
-            "Co-Lead",
-
-            "Executive"
-
-        ]
-
-        .includes(
-            user.role
-        )
-
-
-        ?
-
-
-        "block"
-
-
-        :
-
-
-        "none";
+);
 
 
 
-    }
+
+
+
+
+
+setText(
+
+"userRole",
+
+user.role
+
+);
+
+
+
+
+
+
+
+const button =
+
+document.getElementById(
+
+"createTaskBtn"
+
+);
+
+
+
+
+
+
+if(button){
+
+
+
+button.style.display =
+
+
+
+
+[
+
+"Lead",
+
+"Co-Lead",
+
+"Executive"
+
+]
+
+.includes(
+
+user.role
+
+)
+
+
+
+?
+
+"block"
+
+
+
+:
+
+"none";
 
 
 
 }
+
+
+
+
+
+}
+
+
+
+
 
 
 

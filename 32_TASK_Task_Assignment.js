@@ -226,4 +226,57 @@ return true;
 
 
 }
+/******************************************************
+ * GET MEMBERS ASSIGNED TO TASK
+ ******************************************************/
 
+function getAssignedMembers(taskID){
+
+
+const assignments =
+getTaskAssignmentsCached();
+
+
+
+return assignments
+
+.filter(row =>
+
+row[1] === taskID
+
+)
+
+.map(row => row[2]);
+
+
+}
+
+
+
+
+
+
+/******************************************************
+ * GET TASK IDS ASSIGNED TO MEMBER
+ ******************************************************/
+
+function getTasksAssignedToMember(memberID){
+
+
+const assignments =
+getTaskAssignmentsCached();
+
+
+
+return assignments
+
+.filter(row =>
+
+row[2] === memberID
+
+)
+
+.map(row => row[1]);
+
+
+}

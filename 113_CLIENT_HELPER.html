@@ -24,7 +24,6 @@
 
 const TASK_IDX = {
 
-
 ID:0,
 
 TITLE:1,
@@ -35,24 +34,35 @@ PROJECT:3,
 
 CREATED_BY:4,
 
-PRIORITY:5,
+ASSIGNED_TO:5,
 
-START_DATE:6,
+PRIORITY:6,
 
-DEADLINE:7,
+START_DATE:7,
 
-STATUS:8,
+DEADLINE:8,
 
-PROGRESS:9,
+STATUS:9,
 
-NOTES:10,
+PROGRESS:10,
 
-EVIDENCE:11,
+INSTRUCTIONS:11,
 
-CREATED_DATE:12,
+NOTES:12,
 
-UPDATED_DATE:13
+EVIDENCE:13,
 
+SUBMITTED_DATE:14,
+
+REVIEWED_BY:15,
+
+REVIEW_NOTES:16,
+
+CREATED_DATE:17,
+
+UPDATED_DATE:18,
+
+ARCHIVED_DATE:19
 
 };
 
@@ -286,17 +296,15 @@ return formatted
  ******************************************************/
 
 
-function getStatusClass(
-status
-){
+function getStatusClass(status){
 
 
 switch(status){
 
 
-case "Completed":
+case "Assigned":
 
-return "success";
+return "pending";
 
 
 
@@ -306,15 +314,15 @@ return "warning";
 
 
 
-case "Pending":
+case "For Review":
 
-return "pending";
+return "review";
 
 
 
-case "Rejected":
+case "Completed":
 
-return "danger";
+return "success";
 
 
 

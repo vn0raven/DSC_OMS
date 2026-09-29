@@ -1,10 +1,21 @@
 <script>
 
-
 /******************************************************
- * CLIENT API SERVICE
+ * CLIENT API SERVICE V3
+ *
+ * Handles:
+ * - Server communication
+ * - API wrappers
+ * - Frontend/backend bridge
  ******************************************************/
 
+
+
+
+
+/******************************************************
+ * SERVER CALL HANDLER
+ ******************************************************/
 
 
 function serverCall(
@@ -39,12 +50,16 @@ success(response);
 })
 
 
+
 .withFailureHandler(function(error){
 
 
 console.error(
+
 "SERVER ERROR:",
+
 error
+
 );
 
 
@@ -70,10 +85,13 @@ failure(error);
 
 
 
-/******************************************************
- * APP DATA
- ******************************************************/
 
+
+
+
+/******************************************************
+ * APPLICATION DATA
+ ******************************************************/
 
 
 function apiGetAppData(callback){
@@ -92,17 +110,47 @@ function(error){
 
 
 showError(
-error.message
+
+error.message ||
+
+"Unable to load application."
+
+);
+
+
+}
+
+
+
 );
 
 
 }
 
 
-);
+
+
+
+
+/*
+ * Refresh application data
+ *
+ * Used after:
+ * - Task update
+ * - Task completion
+ * - New task creation
+ */
+
+
+function apiRefreshAppData(callback){
+
+
+apiGetAppData(callback);
 
 
 }
+
+
 
 
 
@@ -113,7 +161,6 @@ error.message
 /******************************************************
  * DASHBOARD
  ******************************************************/
-
 
 
 function apiGetDashboard(callback){
@@ -131,6 +178,9 @@ callback
 
 
 }
+
+
+
 
 
 
@@ -164,6 +214,7 @@ callback
 
 
 
+
 function apiCreateTask(
 task,
 callback
@@ -190,20 +241,36 @@ callback
 
 
 
-function apiCompleteTask(
-id,
-evidence,
+
+
+
+/******************************************************
+ * UPDATE TASK
+ *
+ * Sends:
+ * - Task ID
+ * - Status
+ * - Progress
+ * - Notes
+ *
+ * Used by:
+ * 132_TASK_View.html
+ ******************************************************/
+
+
+
+function apiUpdateTask(
+taskUpdate,
 callback
 ){
 
 
 serverCall(
 
-"apiCompleteTask",
+"apiUpdateTask",
 
 [
-id,
-evidence
+taskUpdate
 ],
 
 callback
@@ -218,10 +285,45 @@ callback
 
 
 
+
+
+function apiCompleteTask(
+id,
+evidence,
+callback
+){
+
+
+serverCall(
+
+"apiCompleteTask",
+
+[
+
+id,
+
+evidence
+
+],
+
+callback
+
+);
+
+
+}
+
+
+
+
+
+
+
+
+
 /******************************************************
  * USERS
  ******************************************************/
-
 
 
 function apiGetUsers(callback){
@@ -239,6 +341,7 @@ callback
 
 
 }
+
 
 
 
@@ -278,6 +381,8 @@ callback
 
 
 
+
+
 function apiApproveRequest(
 requestID,
 callback
@@ -289,7 +394,9 @@ serverCall(
 "apiApproveRequest",
 
 [
+
 requestID
+
 ],
 
 callback
@@ -298,6 +405,9 @@ callback
 
 
 }
+
+
+
 
 
 
@@ -315,8 +425,11 @@ serverCall(
 "apiRejectRequest",
 
 [
+
 requestID,
+
 remarks
+
 ],
 
 callback
@@ -325,6 +438,7 @@ callback
 
 
 }
+
 
 
 
@@ -359,6 +473,9 @@ callback
 
 
 
+
+
+
 function apiMarkNotificationRead(
 notificationID,
 callback
@@ -370,7 +487,9 @@ serverCall(
 "apiMarkNotificationRead",
 
 [
+
 notificationID
+
 ],
 
 callback
@@ -379,6 +498,8 @@ callback
 
 
 }
+
+
 
 
 

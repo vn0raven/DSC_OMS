@@ -1,8 +1,26 @@
 <script>
 
+/******************************************************
+ * TASK VIEW MODULE V4
+ *
+ * Handles:
+ * - Task details
+ * - Member updates
+ * - Submission for review
+ * - Executive review workflow
+ ******************************************************/
+
+
 
 let SELECTED_TASK = null;
 
+
+
+
+
+/******************************************************
+ * OPEN TASK
+ ******************************************************/
 
 
 window.viewTask = function(taskID){
@@ -10,9 +28,9 @@ window.viewTask = function(taskID){
 
 const task = APP_STATE.tasks.find(
 
-task =>
+item =>
 
-task[TASK_IDX.ID] === taskID
+String(item[TASK_IDX.ID]) === String(taskID)
 
 );
 
@@ -20,7 +38,11 @@ task[TASK_IDX.ID] === taskID
 
 if(!task){
 
-alert("Task not found.");
+
+alert(
+"Task not found."
+);
+
 
 return;
 
@@ -34,52 +56,375 @@ SELECTED_TASK = task;
 showTaskDetails(task);
 
 
-}
+};
 
 
 
+
+
+
+
+/******************************************************
+ * SHOW TASK DETAILS
+ ******************************************************/
 
 
 function showTaskDetails(task){
 
 
-alert(
-
-"Task Details\n\n"
-
-+
-
-"Title: "
-
-+
-
-task[TASK_IDX.TITLE]
-
-+
-
-"\nDepartment: "
-
-+
-
-task[TASK_IDX.DEPARTMENT]
-
-+
-
-"\nPriority: "
-
-+
-
-task[TASK_IDX.PRIORITY]
-
-+
-
-"\nStatus: "
-
-+
-
-task[TASK_IDX.STATUS]
-
+const modal =
+document.getElementById(
+"taskModal"
 );
+
+
+const body =
+document.getElementById(
+"taskModalBody"
+);
+
+
+
+if(!modal || !body){
+
+console.error(
+"Task modal missing"
+);
+
+return;
+
+}
+
+
+
+
+
+const status =
+task[TASK_IDX.STATUS] || "";
+
+
+
+
+
+body.innerHTML = `
+
+
+
+<div class="task-header">
+
+
+<div>
+
+<h2>
+
+${escapeHTML(
+task[TASK_IDX.TITLE] || ""
+)}
+
+</h2>
+
+
+<div class="task-meta">
+
+${escapeHTML(
+task[TASK_IDX.DEPARTMENT] || ""
+)}
+
+</div>
+
+
+</div>
+
+
+
+<span class="status ${getStatusClass(status)}">
+
+${escapeHTML(status)}
+
+</span>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Instructions
+
+</label>
+
+
+<div class="task-description">
+
+${escapeHTML(
+
+task[TASK_IDX.INSTRUCTIONS] || 
+
+"No instructions provided."
+
+)}
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Priority
+
+</label>
+
+
+<input
+
+class="form-control"
+
+readonly
+
+value="${escapeHTML(
+
+task[TASK_IDX.PRIORITY] || ""
+
+)}">
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Progress (%)
+
+</label>
+
+
+<input
+
+type="number"
+
+id="taskProgressInput"
+
+class="form-control"
+
+min="0"
+
+max="100"
+
+value="${
+
+task[TASK_IDX.PROGRESS] || 0
+
+}">
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Notes / Updates
+
+</label>
+
+
+<textarea
+
+id="taskNotesInput"
+
+class="form-control"
+
+placeholder="Write your progress update...">
+
+${escapeHTML(
+
+task[TASK_IDX.NOTES] || ""
+
+)}
+
+</textarea>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Evidence Link
+
+</label>
+
+
+<input
+
+id="taskEvidenceInput"
+
+class="form-control"
+
+placeholder="Paste evidence link"
+
+value="${escapeHTML(
+
+task[TASK_IDX.EVIDENCE_LINK] || ""
+
+)}">
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Status
+
+</label>
+
+
+<select
+
+id="taskStatusInput"
+
+class="form-control">
+
+
+<option value="Assigned">
+
+Assigned
+
+</option>
+
+
+<option value="Ongoing">
+
+Ongoing
+
+</option>
+
+
+<option value="For Review">
+
+For Review
+
+</option>
+
+
+<option value="Completed">
+
+Completed
+
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div style="margin-top:20px;">
+
+
+<button
+
+onclick="saveTaskUpdate()">
+
+Save Update
+
+</button>
+
+
+
+
+
+<button
+
+onclick="closeTaskModal()"
+
+style="margin-left:10px;background:#6b7280;">
+
+
+Close
+
+
+</button>
+
+
+</div>
+
+
+
+`;
+
+
+
+
+
+document.getElementById(
+"taskStatusInput"
+).value=status;
+
+
+
+modal.style.display="flex";
 
 
 }
@@ -88,7 +433,16 @@ task[TASK_IDX.STATUS]
 
 
 
-function completeSelectedTask(){
+
+
+
+
+/******************************************************
+ * SAVE UPDATE
+ ******************************************************/
+
+
+window.saveTaskUpdate=function(){
 
 
 if(!SELECTED_TASK){
@@ -98,24 +452,190 @@ return;
 }
 
 
-apiCompleteTask(
+
+const update = {
+
+
+id:
 
 SELECTED_TASK[TASK_IDX.ID],
 
-"",
 
-function(){
 
-alert(
-"Task completed."
+progress:
+
+Number(
+
+document.getElementById(
+"taskProgressInput"
+).value
+
+),
+
+
+
+
+status:
+
+document.getElementById(
+"taskStatusInput"
+).value,
+
+
+
+
+
+notes:
+
+document.getElementById(
+"taskNotesInput"
+).value,
+
+
+
+
+
+evidence:
+
+document.getElementById(
+"taskEvidenceInput"
+).value
+
+
+
+};
+
+
+
+
+
+console.log(
+"TASK UPDATE",
+update
 );
 
 
-if(typeof refreshTasks === "function"){
 
-refreshTasks();
+
+
+
+apiUpdateTask(
+
+update,
+
+function(response){
+
+
+
+if(response && response.success){
+
+
+alert(
+"Task updated successfully."
+);
+
+
+closeTaskModal();
+
+
+refreshApp();
+
 
 }
+
+else{
+
+
+alert(
+
+response.message ||
+
+"Update failed."
+
+);
+
+
+}
+
+
+
+},
+
+
+
+handleError
+
+
+
+);
+
+
+
+};
+
+
+
+
+
+
+
+
+
+/******************************************************
+ * SUBMIT FOR REVIEW
+ ******************************************************/
+
+
+window.submitTaskForReview=function(){
+
+
+if(!SELECTED_TASK){
+
+return;
+
+}
+
+
+
+
+
+const update={
+
+
+id:
+
+SELECTED_TASK[TASK_IDX.ID],
+
+
+
+status:
+
+CLIENT_CONFIG.STATUS.FOR_REVIEW,
+
+
+
+progress:100
+
+
+
+};
+
+
+
+
+apiUpdateTask(
+
+update,
+
+function(){
+
+
+alert(
+"Task submitted for review."
+);
+
+
+refreshApp();
 
 
 },
@@ -127,7 +647,46 @@ handleError
 );
 
 
+
+};
+
+
+
+
+
+
+
+
+
+/******************************************************
+ * CLOSE MODAL
+ ******************************************************/
+
+
+window.closeTaskModal=function(){
+
+
+
+const modal =
+document.getElementById(
+"taskModal"
+);
+
+
+
+if(modal){
+
+modal.style.display="none";
+
 }
+
+
+
+};
+
+
+
+
 
 
 </script>

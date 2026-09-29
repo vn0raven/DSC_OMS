@@ -1,29 +1,25 @@
 <style>
 
 /******************************************************
- * TASK VIEW MINI UI SYSTEM
+ * TASK VIEW UI SYSTEM V4
  *
- * Independent styling for:
- * - Task detail modal
- * - Task information cards
- * - Action buttons
- *
- * Edit colors/fonts here only.
+ * Supports:
+ * - Task modal
+ * - Instructions
+ * - Notes
+ * - Evidence
+ * - Progress updates
+ * - Review workflow
  ******************************************************/
 
-
-
-/* ==========================
-   GLOBAL TASK VIEW SETTINGS
-========================== */
 
 
 :root{
 
 
-/* MAIN COLORS */
+--task-primary:#800000;
 
---task-primary:#1f4e79;
+--task-primary-hover:#660000;
 
 --task-secondary:#64748b;
 
@@ -31,37 +27,28 @@
 
 --task-card:#ffffff;
 
---task-border:#e2e8f0;
+--task-border:#e5e7eb;
 
---task-text:#1e293b;
+--task-text:#111827;
 
---task-muted:#64748b;
-
-
-
-/* STATUS COLORS */
-
---status-success:#16a34a;
-
---status-warning:#f59e0b;
-
---status-danger:#dc2626;
+--task-muted:#6b7280;
 
 
+--success:#16a34a;
 
-/* STYLE */
+--warning:#d97706;
 
---task-radius:14px;
-
---task-shadow:
-0 10px 30px rgba(0,0,0,0.12);
+--danger:#dc2626;
 
 
+--radius:16px;
 
-/* FONT */
+--shadow:
+0 20px 50px rgba(0,0,0,.15);
 
---task-font:
-"Inter",
+
+--font:
+"Google Sans",
 "Segoe UI",
 Arial,
 sans-serif;
@@ -73,8 +60,9 @@ sans-serif;
 
 
 
+
 /******************************************************
- MODAL BACKGROUND
+ MODAL OVERLAY
 ******************************************************/
 
 
@@ -87,35 +75,28 @@ display:none;
 position:fixed;
 
 
-top:0;
-
-left:0;
-
-
-width:100%;
-
-height:100%;
-
+inset:0;
 
 
 background:
 
-rgba(15,23,42,0.55);
+rgba(15,23,42,.55);
 
 
 
 justify-content:center;
 
+
 align-items:center;
 
 
 
-z-index:999;
-
+z-index:9999;
 
 
 font-family:
-var(--task-font);
+
+var(--font);
 
 
 }
@@ -125,43 +106,46 @@ var(--task-font);
 
 
 
-
 /******************************************************
- MODAL BOX
+ MODAL CONTAINER
 ******************************************************/
 
 
 .task-modal-content{
 
 
-width:600px;
+width:650px;
 
 
-max-width:90%;
+max-width:92%;
 
 
 
-background:
-var(--task-card);
+max-height:90vh;
+
+
+overflow-y:auto;
+
+
+
+background:white;
 
 
 
 border-radius:
-var(--task-radius);
+
+var(--radius);
+
+
+
+padding:30px;
 
 
 
 box-shadow:
-var(--task-shadow);
 
+var(--shadow);
 
-
-padding:25px;
-
-
-
-color:
-var(--task-text);
 
 
 }
@@ -186,14 +170,14 @@ display:flex;
 justify-content:space-between;
 
 
-align-items:center;
+align-items:flex-start;
 
 
-
-margin-bottom:20px;
+margin-bottom:25px;
 
 
 }
+
 
 
 
@@ -203,10 +187,11 @@ margin-bottom:20px;
 margin:0;
 
 
-font-size:24px;
+font-size:26px;
 
 
 color:
+
 var(--task-primary);
 
 
@@ -214,13 +199,18 @@ var(--task-primary);
 
 
 
-.task-id{
+
+.task-meta{
 
 
-font-size:12px;
+margin-top:6px;
+
+
+font-size:14px;
 
 
 color:
+
 var(--task-muted);
 
 
@@ -232,70 +222,203 @@ var(--task-muted);
 
 
 
+
 /******************************************************
- STATUS BADGE
+ STATUS
 ******************************************************/
 
 
-.status-badge{
+.status{
 
 
-padding:6px 14px;
+padding:
+
+6px 14px;
 
 
-border-radius:20px;
+border-radius:
+
+999px;
 
 
-font-size:13px;
+font-size:12px;
 
 
-font-weight:600;
-
-
-background:#e2e8f0;
-
-
-}
-
-
-
-
-
-.status-badge.success{
-
-
-background:#dcfce7;
-
-
-color:
-var(--status-success);
+font-weight:700;
 
 
 }
 
 
 
-.status-badge.warning{
-
-
-background:#fef3c7;
-
-
-color:
-var(--status-warning);
-
-
-}
-
-
-
-.status-badge.pending{
+.status-assigned{
 
 
 background:#e0f2fe;
 
 
+color:#0369a1;
+
+
+}
+
+
+
+.status-ongoing{
+
+
+background:#fef3c7;
+
+
+color:#92400e;
+
+
+}
+
+
+
+.status-review{
+
+
+background:#ede9fe;
+
+
+color:#6d28d9;
+
+
+}
+
+
+
+.status-completed{
+
+
+background:#dcfce7;
+
+
+color:#166534;
+
+
+}
+
+
+
+.status-archived{
+
+
+background:#e5e7eb;
+
+
+color:#374151;
+
+
+}
+
+
+
+
+
+
+
+
+/******************************************************
+ FORM GROUP
+******************************************************/
+
+
+.form-group{
+
+
+margin-bottom:18px;
+
+
+}
+
+
+
+
+.form-group label{
+
+
+display:block;
+
+
+font-size:13px;
+
+
+font-weight:700;
+
+
+margin-bottom:7px;
+
+
 color:
+
+var(--task-text);
+
+
+}
+
+
+
+
+
+
+
+
+/******************************************************
+ INPUTS
+******************************************************/
+
+
+.form-control{
+
+
+width:100%;
+
+
+padding:
+
+12px 14px;
+
+
+
+border:
+
+1px solid var(--task-border);
+
+
+
+border-radius:
+
+10px;
+
+
+
+font-size:14px;
+
+
+
+background:white;
+
+
+font-family:
+
+var(--font);
+
+
+}
+
+
+
+.form-control:focus{
+
+
+outline:none;
+
+
+border-color:
+
 var(--task-primary);
 
 
@@ -303,14 +426,17 @@ var(--task-primary);
 
 
 
-.status-badge.danger{
 
 
-background:#fee2e2;
 
 
-color:
-var(--status-danger);
+textarea.form-control{
+
+
+min-height:120px;
+
+
+resize:vertical;
 
 
 }
@@ -323,7 +449,60 @@ var(--status-danger);
 
 
 /******************************************************
- TASK INFORMATION GRID
+ INSTRUCTIONS DISPLAY
+******************************************************/
+
+
+.task-description{
+
+
+background:
+
+#fff7ed;
+
+
+
+border-left:
+
+4px solid var(--task-primary);
+
+
+
+padding:
+
+15px;
+
+
+
+border-radius:
+
+10px;
+
+
+
+font-size:14px;
+
+
+
+line-height:1.5;
+
+
+color:
+
+var(--task-text);
+
+
+}
+
+
+
+
+
+
+
+
+/******************************************************
+ INFO GRID
 ******************************************************/
 
 
@@ -342,10 +521,10 @@ repeat(2,1fr);
 gap:15px;
 
 
+margin-bottom:20px;
+
+
 }
-
-
-
 
 
 
@@ -354,6 +533,7 @@ gap:15px;
 
 
 background:
+
 var(--task-background);
 
 
@@ -377,38 +557,25 @@ padding:15px;
 
 
 
-
-
 .task-card label{
-
-
-display:block;
 
 
 font-size:12px;
 
 
 color:
+
 var(--task-muted);
-
-
-
-margin-bottom:5px;
 
 
 }
 
 
 
-
-
 .task-card p{
 
 
-margin:0;
-
-
-font-size:15px;
+margin:5px 0 0;
 
 
 font-weight:600;
@@ -424,66 +591,7 @@ font-weight:600;
 
 
 /******************************************************
- NOTES SECTION
-******************************************************/
-
-
-.task-section{
-
-
-margin-top:20px;
-
-
-}
-
-
-
-.task-section h3{
-
-
-font-size:16px;
-
-
-margin-bottom:8px;
-
-
-}
-
-
-
-
-
-.task-section p{
-
-
-background:
-var(--task-background);
-
-
-
-border:
-
-1px solid var(--task-border);
-
-
-
-padding:15px;
-
-
-
-border-radius:12px;
-
-
-}
-
-
-
-
-
-
-
-/******************************************************
- BUTTONS
+ ACTION BUTTONS
 ******************************************************/
 
 
@@ -494,7 +602,6 @@ display:flex;
 
 
 justify-content:flex-end;
-
 
 
 gap:10px;
@@ -508,13 +615,15 @@ margin-top:25px;
 
 
 
+.task-actions button,
 
-.task-actions button{
+
+button{
 
 
 padding:
 
-10px 18px;
+11px 20px;
 
 
 
@@ -539,13 +648,14 @@ font-weight:600;
 
 
 
+.btn-primary,
 
 
-
-.btn-primary{
+button{
 
 
 background:
+
 var(--task-primary);
 
 
@@ -557,18 +667,15 @@ color:white;
 
 
 
+.btn-primary:hover,
 
-.btn-secondary{
+
+button:hover{
 
 
 background:
 
-#e2e8f0;
-
-
-color:
-
-var(--task-text);
+var(--task-primary-hover);
 
 
 }
@@ -579,16 +686,84 @@ var(--task-text);
 
 
 
-.btn-primary:hover,
+.btn-secondary{
 
 
-.btn-secondary:hover{
+background:#e5e7eb;
 
 
-opacity:.85;
+color:#111827;
 
 
 }
+
+
+
+
+.btn-danger{
+
+
+background:
+
+var(--danger);
+
+
+color:white;
+
+
+}
+
+
+
+
+
+
+
+
+/******************************************************
+ REVIEW SECTION
+******************************************************/
+
+
+.review-box{
+
+
+background:#f9fafb;
+
+
+border:
+
+1px solid var(--task-border);
+
+
+
+border-radius:12px;
+
+
+
+padding:15px;
+
+
+margin-top:20px;
+
+
+}
+
+
+
+
+.review-box h3{
+
+
+margin-top:0;
+
+
+font-size:16px;
+
+
+}
+
+
 
 
 
@@ -604,6 +779,20 @@ opacity:.85;
 @media(max-width:700px){
 
 
+.task-modal-content{
+
+
+width:95%;
+
+
+padding:20px;
+
+
+}
+
+
+
+
 .task-grid{
 
 
@@ -614,17 +803,9 @@ grid-template-columns:1fr;
 
 
 
-.task-modal-content{
-
-
-width:95%;
-
-
 }
 
 
-
-}
 
 
 </style>

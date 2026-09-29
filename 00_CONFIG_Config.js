@@ -1,9 +1,10 @@
 /******************************************************
- * SYSTEM CONFIGURATION
+ * SYSTEM CONFIGURATION V2
  ******************************************************/
 
 
 const CONFIG = {
+
 
 
 SHEETS:{
@@ -11,19 +12,30 @@ SHEETS:{
 
 USERS:"USERS",
 
+
 TASKS:"TASKS",
+
 
 TASK_ASSIGNMENTS:"TASK_ASSIGNMENTS",
 
-REQUESTS:"REQUESTS",
-
-APPROVALS:"APPROVALS",
-
-LOGS:"ACTIVITY_LOG",
 
 TASK_HISTORY:"TASK_HISTORY",
 
+
+ARCHIVE_TASKS:"ARCHIVE_TASKS",
+
+
+REQUESTS:"REQUESTS",
+
+
+APPROVALS:"APPROVALS",
+
+
+LOGS:"ACTIVITY_LOG",
+
+
 NOTIFICATIONS:"NOTIFICATIONS",
+
 
 SETTINGS:"SETTINGS"
 
@@ -33,16 +45,27 @@ SETTINGS:"SETTINGS"
 
 
 
+
+
+/******************************************************
+ * USER ROLES
+ ******************************************************/
+
+
 ROLES:{
 
 
 LEAD:"Lead",
 
+
 COLEAD:"Co-Lead",
+
 
 EXECUTIVE:"Executive",
 
+
 OFFICER:"Officer",
+
 
 MEMBER:"Member"
 
@@ -50,6 +73,13 @@ MEMBER:"Member"
 },
 
 
+
+
+
+
+/******************************************************
+ * ROLE LEVELS
+ ******************************************************/
 
 
 ROLE_LEVELS:{
@@ -57,9 +87,12 @@ ROLE_LEVELS:{
 
 ADMIN:"Admin",
 
+
 EXECUTIVE:"Executive",
 
+
 OFFICER:"Officer",
+
 
 MEMBER:"Member"
 
@@ -69,20 +102,30 @@ MEMBER:"Member"
 
 
 
+
+
+/******************************************************
+ * TASK STATUS FLOW
+ ******************************************************/
+
+
 STATUS:{
 
 
-PENDING:"Pending",
+ASSIGNED:"Assigned",
+
 
 ONGOING:"Ongoing",
 
+
+FOR_REVIEW:"For Review",
+
+
 COMPLETED:"Completed",
 
-APPROVED:"Approved",
-
-REJECTED:"Rejected",
 
 ARCHIVED:"Archived"
+
 
 
 },
@@ -90,14 +133,24 @@ ARCHIVED:"Archived"
 
 
 
+
+
+/******************************************************
+ * PRIORITY
+ ******************************************************/
+
+
 PRIORITY:{
 
 
 CRITICAL:"Critical",
 
+
 HIGH:"High",
 
+
 MEDIUM:"Medium",
+
 
 LOW:"Low"
 
@@ -107,12 +160,21 @@ LOW:"Low"
 
 
 
+
+
+/******************************************************
+ * REQUEST STATUS
+ ******************************************************/
+
+
 REQUEST_STATUS:{
 
 
 PENDING:"Pending",
 
+
 APPROVED:"Approved",
+
 
 REJECTED:"Rejected"
 
@@ -122,7 +184,20 @@ REJECTED:"Rejected"
 
 
 
+
+
+/******************************************************
+ * PERMISSIONS
+ ******************************************************/
+
+
 PERMISSIONS:{
+
+
+
+/*
+ Create tasks
+*/
 
 
 CREATE_ALL_TASKS:[
@@ -135,12 +210,19 @@ CREATE_ALL_TASKS:[
 
 
 
+
 CREATE_DEPARTMENT_TASKS:[
 
 "Executive"
 
 ],
 
+
+
+
+/*
+ Assignment
+*/
 
 
 ASSIGN_ALL_TASKS:[
@@ -161,6 +243,14 @@ ASSIGN_DEPARTMENT_TASKS:[
 
 
 
+
+
+
+/*
+ Task management
+*/
+
+
 DELETE_TASKS:[
 
 "Lead",
@@ -171,7 +261,15 @@ DELETE_TASKS:[
 
 
 
-APPROVE_ALL_REQUESTS:[
+
+
+
+/*
+ Review workflow
+*/
+
+
+REVIEW_ALL_TASKS:[
 
 "Lead",
 
@@ -181,7 +279,7 @@ APPROVE_ALL_REQUESTS:[
 
 
 
-APPROVE_DEPARTMENT_REQUESTS:[
+REVIEW_DEPARTMENT_TASKS:[
 
 "Executive"
 
@@ -189,7 +287,15 @@ APPROVE_DEPARTMENT_REQUESTS:[
 
 
 
-UPDATE_OWN_ASSIGNED_TASKS:[
+
+
+
+/*
+ Member updates
+*/
+
+
+UPDATE_ASSIGNED_TASKS:[
 
 "Executive",
 
@@ -200,9 +306,17 @@ UPDATE_OWN_ASSIGNED_TASKS:[
 ]
 
 
+
 },
 
 
+
+
+
+
+/******************************************************
+ * SYSTEM
+ ******************************************************/
 
 
 SYSTEM:{
@@ -210,10 +324,13 @@ SYSTEM:{
 
 NAME:"DSC USeP OMT System",
 
-VERSION:"1.0"
+
+VERSION:"2.0"
 
 
 }
+
+
 
 
 };
@@ -222,13 +339,16 @@ VERSION:"1.0"
 
 
 
+
+
+
+
 /******************************************************
- * TASK DATABASE INDEX
+ * TASK DATABASE INDEX V2
  ******************************************************/
 
 
 const TASK_IDX = {
-
 
 ID:0,
 
@@ -240,24 +360,34 @@ PROJECT:3,
 
 CREATED_BY:4,
 
-PRIORITY:5,
+ASSIGNED_TO:5,
 
-START_DATE:6,
+PRIORITY:6,
 
-DEADLINE:7,
+START_DATE:7,
 
-STATUS:8,
+DEADLINE:8,
 
-PROGRESS:9,
+STATUS:9,
 
-NOTES:10,
+PROGRESS:10,
 
-EVIDENCE:11,
+INSTRUCTIONS:11,
 
-CREATED_DATE:12,
+NOTES:12,
 
-UPDATED_DATE:13
+EVIDENCE:13,
 
+SUBMITTED_DATE:14,
+
+REVIEWED_BY:15,
+
+REVIEW_NOTES:16,
+
+CREATED_DATE:17,
+
+UPDATED_DATE:18,
+
+ARCHIVED_DATE:19
 
 };
-

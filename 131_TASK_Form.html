@@ -1,25 +1,36 @@
 <script>
 
 /******************************************************
- * CREATE TASK FORM
+ * CREATE TASK FORM V2
+ *
+ * Handles:
+ * - Task creation
+ * - Assignment
+ * - Instructions
+ * - New TASKS V2 schema
  ******************************************************/
+
 
 
 window.openCreateTask = function(){
 
 
+
 const title =
+
 prompt(
-"Enter task title:"
+"Task title:"
 );
 
 
 
 if(!title || title.trim()===""){
 
+
 alert(
 "Task title is required."
 );
+
 
 return;
 
@@ -28,28 +39,86 @@ return;
 
 
 
-const department =
+
+const project =
+
 prompt(
-"Enter department:"
-) || "Technology";
+"Project / Event:"
+)
+
+|| "";
+
+
+
+
+
+
+
+const department =
+
+prompt(
+"Department:"
+)
+
+|| "Technology";
+
+
+
+
+
+
+
+const assignedTo =
+
+prompt(
+"Assign member ID:"
+)
+
+|| "";
+
+
+
 
 
 
 
 
 const priority =
+
 prompt(
-"Enter priority (Low / Medium / High):"
-) || "Medium";
+"Priority (Low / Medium / High):"
+)
+
+|| "Medium";
+
+
+
+
+
+
+
+
+const startDate =
+
+prompt(
+"Start date YYYY-MM-DD:"
+)
+
+|| "";
+
+
+
 
 
 
 
 
 const deadline =
+
 prompt(
-"Enter deadline YYYY-MM-DD:"
+"Deadline YYYY-MM-DD:"
 );
+
 
 
 
@@ -57,11 +126,14 @@ prompt(
 
 if(!deadline){
 
+
 alert(
 "Deadline is required."
 );
 
+
 return;
+
 
 }
 
@@ -69,10 +141,17 @@ return;
 
 
 
-const description =
+
+
+
+const instructions =
+
 prompt(
-"Enter description:"
-) || "";
+"Task instructions:"
+)
+
+|| "";
+
 
 
 
@@ -83,22 +162,45 @@ prompt(
 const task = {
 
 
+
 title:title.trim(),
+
+
+
+project:project.trim(),
+
 
 
 department:department.trim(),
 
 
+
+assignedTo:assignedTo.trim(),
+
+
+
 priority:priority.trim(),
+
+
+
+startDate:startDate.trim(),
+
 
 
 deadline:deadline.trim(),
 
 
-description:description.trim(),
+
+instructions:instructions.trim(),
 
 
-status:"Pending"
+
+notes:"",
+
+
+
+evidence:""
+
 
 
 };
@@ -107,10 +209,17 @@ status:"Pending"
 
 
 
+
+
 console.log(
+
 "CREATING TASK:",
+
 task
+
 );
+
+
 
 
 
@@ -121,17 +230,25 @@ task
 apiCreateTask(
 
 
+
 task,
+
 
 
 function(response){
 
 
 
+
+
 console.log(
+
 "CREATE RESPONSE:",
+
 response
+
 );
+
 
 
 
@@ -154,19 +271,22 @@ return;
 
 
 
+
+
 if(response.success){
 
 
 
 alert(
+
 "Task created successfully."
+
 );
 
 
 
 
 
-// refresh current data
 
 APP_LOADED=false;
 
@@ -195,24 +315,36 @@ response.message ||
 
 
 
+
 },
+
+
 
 
 
 function(error){
 
 
+
 console.error(
+
 "CREATE TASK ERROR:",
+
 error
+
 );
+
 
 
 
 alert(
+
 error.message ||
+
 "Unable to create task."
+
 );
+
 
 
 
@@ -220,11 +352,13 @@ error.message ||
 
 
 
+
 );
 
 
 
-}
+};
+
 
 
 

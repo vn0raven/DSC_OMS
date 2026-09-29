@@ -6,7 +6,6 @@
  * Handles:
  * - Page navigation
  * - Active menu state
- * - Module loading
  ******************************************************/
 
 
@@ -15,26 +14,16 @@
  * SHOW SECTION
  ******************************************************/
 
-window.showSection = function(button, section){
+window.showSection = function(
+button,
+section
+){
 
 
 console.log(
-"========== ROUTER START =========="
-);
-
-
-console.log(
-"TARGET SECTION:",
+"ROUTER:",
 section
 );
-
-
-console.log(
-"CLICK BUTTON:",
-button
-);
-
-
 
 
 
@@ -42,32 +31,15 @@ button
  Hide all sections
 */
 
-
-const sections = document.querySelectorAll(
+document
+.querySelectorAll(
 ".page-section"
-);
-
-
-
-console.log(
-"SECTIONS FOUND:",
-sections.length
-);
-
-
-
-sections.forEach(function(page){
-
-
-if(page){
+)
+.forEach(function(page){
 
 page.style.display = "none";
 
-}
-
-
 });
-
 
 
 
@@ -77,42 +49,16 @@ page.style.display = "none";
  Show selected section
 */
 
-
 const target = document.getElementById(
 section
 );
 
 
-
-console.log(
-"TARGET ELEMENT:",
-target
-);
-
-
-
-
 if(target){
-
 
 target.style.display = "block";
 
-
 }
-else{
-
-
-console.error(
-"SECTION NOT FOUND:",
-section
-);
-
-
-return;
-
-
-}
-
 
 
 
@@ -123,32 +69,15 @@ return;
  Remove active state
 */
 
-
-const navItems = document.querySelectorAll(
+document
+.querySelectorAll(
 ".nav-item"
-);
-
-
-
-console.log(
-"NAV ITEMS FOUND:",
-navItems.length
-);
-
-
-
-
-navItems.forEach(function(item){
-
-
-if(item){
+)
+.forEach(function(item){
 
 item.classList.remove(
 "active"
 );
-
-}
-
 
 });
 
@@ -157,32 +86,17 @@ item.classList.remove(
 
 
 
-
-
 /*
- Add active state
+ Add active state safely
 */
 
-
 if(button){
-
 
 button.classList.add(
 "active"
 );
 
-
 }
-else{
-
-
-console.warn(
-"No button provided"
-);
-
-
-}
-
 
 
 
@@ -195,7 +109,6 @@ console.warn(
  Load module data when needed
 */
 
-
 switch(section){
 
 
@@ -203,33 +116,16 @@ switch(section){
 case "dashboard":
 
 
-
-if(typeof renderDashboard === "function"){
-
-
-console.log(
-"Loading dashboard"
-);
-
+if(
+typeof renderDashboard === "function"
+){
 
 renderDashboard();
-
-
-
-}
-else{
-
-
-console.warn(
-"renderDashboard() missing"
-);
-
 
 }
 
 
 break;
-
 
 
 
@@ -239,34 +135,16 @@ break;
 case "tasks":
 
 
-
-if(typeof loadTasks === "function"){
-
-
-console.log(
-"Loading tasks"
-);
-
+if(
+typeof loadTasks === "function"
+){
 
 loadTasks();
-
-
-
-}
-else{
-
-
-console.warn(
-"loadTasks() missing"
-);
-
 
 }
 
 
 break;
-
-
 
 
 
@@ -276,34 +154,16 @@ break;
 case "requests":
 
 
-
-if(typeof loadRequests === "function"){
-
-
-console.log(
-"Loading requests"
-);
-
+if(
+typeof loadRequests === "function"
+){
 
 loadRequests();
-
-
-
-}
-else{
-
-
-console.warn(
-"loadRequests() missing"
-);
-
 
 }
 
 
 break;
-
-
 
 
 
@@ -313,28 +173,12 @@ break;
 case "notifications":
 
 
-
-if(typeof loadNotifications === "function"){
-
-
-console.log(
-"Loading notifications"
-);
-
+if(
+typeof loadNotifications === "function"
+){
 
 loadNotifications();
 
-
-
-}
-else{
-
-
-console.warn(
-"loadNotifications() missing"
-);
-
-
 }
 
 
@@ -342,32 +186,11 @@ break;
 
 
 
-
-default:
-
-
-console.warn(
-"Unknown section:",
-section
-);
-
-
-break;
-
-
-
 }
-
-
-
-
-
-console.log(
-"========== ROUTER END =========="
-);
 
 
 
 };
+
 
 </script>

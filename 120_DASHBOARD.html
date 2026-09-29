@@ -1,7 +1,12 @@
 <script>
 
 /******************************************************
- * DASHBOARD MODULE
+ * DASHBOARD MODULE V2
+ *
+ * Handles:
+ * - Dashboard statistics
+ * - Task summary
+ * - Progress display
  ******************************************************/
 
 
@@ -9,6 +14,10 @@ function renderDashboard(dashboard){
 
 
 if(!dashboard){
+
+console.warn(
+"Dashboard data missing"
+);
 
 return;
 
@@ -21,10 +30,18 @@ dashboard.summary || dashboard;
 
 
 
+/*
+ ============================
+ STATISTICS
+ ============================
+*/
+
+
 setText(
 "totalTasks",
 summary.total || 0
 );
+
 
 
 setText(
@@ -33,16 +50,227 @@ summary.ongoing || 0
 );
 
 
+
 setText(
 "completedTasks",
 summary.completed || 0
 );
 
 
+
 setText(
 "pendingTasks",
 summary.pending || 0
 );
+
+
+
+
+
+/*
+ ============================
+ TASK PROGRESS
+ ============================
+*/
+
+
+renderTaskProgress(
+summary
+);
+
+
+
+
+
+/*
+ ============================
+ ACTIVITY
+ ============================
+*/
+
+
+renderRecentActivity(
+dashboard.activities || []
+);
+
+
+
+}
+
+
+
+/******************************************************
+ * TASK PROGRESS DISPLAY
+ ******************************************************/
+
+
+function renderTaskProgress(data){
+
+
+const element =
+document.getElementById(
+"taskProgress"
+);
+
+
+
+if(!element){
+
+return;
+
+}
+
+
+
+let total =
+Number(data.total || 0);
+
+
+
+let completed =
+Number(data.completed || 0);
+
+
+
+let percentage = 0;
+
+
+
+if(total > 0){
+
+percentage =
+Math.round(
+(completed / total) * 100
+);
+
+}
+
+
+
+element.innerHTML = `
+
+
+<div class="progress">
+
+
+<div 
+class="progress-bar"
+style="width:${percentage}%">
+
+</div>
+
+
+</div>
+
+
+<p>
+
+${percentage}% completed
+
+</p>
+
+
+`;
+
+
+
+}
+
+
+
+
+
+/******************************************************
+ * RECENT ACTIVITY
+ ******************************************************/
+
+
+function renderRecentActivity(
+activities
+){
+
+
+
+const container =
+document.getElementById(
+"recentActivity"
+);
+
+
+
+if(!container){
+
+return;
+
+}
+
+
+
+if(!activities ||
+activities.length === 0
+){
+
+
+container.innerHTML =
+
+`
+<div class="notification">
+
+No recent activity.
+
+</div>
+
+`;
+
+return;
+
+
+}
+
+
+
+
+container.innerHTML = "";
+
+
+activities
+.slice(0,5)
+.forEach(function(item){
+
+
+
+container.innerHTML +=
+
+`
+
+<div class="notification">
+
+
+<strong>
+${escapeHTML(item.user || "User")}
+</strong>
+
+
+${escapeHTML(item.action || "")}
+
+
+<br>
+
+
+<small>
+${escapeHTML(item.time || "")}
+</small>
+
+
+</div>
+
+
+`;
+
+
+
+});
+
 
 
 }
